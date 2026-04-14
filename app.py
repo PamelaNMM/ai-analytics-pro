@@ -21,7 +21,7 @@ app.config['SECURITY_PASSWORD_SALT'] = 'your_security_password_salt'
 db_params = {
     'host': 'localhost',
     'user': 'root',
-    'password': 'Realign1234!',
+    'password': '******',
     'database': 'sales_db',
 }
 
