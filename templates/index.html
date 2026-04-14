@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinAI Pro - AI Financial Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+</head>
+<body>
+<div class="app">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo">
+            <i class="fas fa-chart-line"></i>
+            <span>FinAI Pro</span>
+        </div>
+        <nav class="nav-menu">
+            <a href="#" class="nav-item active" data-tab="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-tab="chat">
+                <i class="fas fa-comments"></i>
+                <span>AI Assistant</span>
+            </a>
+            <a href="#" class="nav-item" data-tab="insights">
+                <i class="fas fa-lightbulb"></i>
+                <span>Insights</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <button id="theme-toggle" class="theme-btn" title="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-title">
+                <h1>Financial Analytics Dashboard</h1>
+                <p>Powered by AI • Real-time Insights</p>
+            </div>
+            <div class="header-actions">
+                <div class="time-display" id="time-display"></div>
+            </div>
+        </header>
+
+        <!-- Dashboard Tab -->
+        <div class="tab-content active" id="dashboard">
+            <!-- Filter Section -->
+            <section class="filter-section">
+                <div class="filter-container">
+                    <div class="filter-group">
+                        <label>Country</label>
+                        <select id="countryFilter" onchange="applyFilters()">
+                            <option value="">All Countries</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Start Date</label>
+                        <input type="date" id="startDate" onchange="applyFilters()">
+                    </div>
+                    <div class="filter-group">
+                        <label>End Date</label>
+                        <input type="date" id="endDate" onchange="applyFilters()">
+                    </div>
+                    <button class="filter-btn" onclick="resetFilters()">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </section>
+
+            <!-- KPI Cards -->
+            <section class="kpi-section">
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <h3>Total Sales</h3>
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="kpi-value" id="total-sales">$0.00</div>
+                        <div class="kpi-change positive">
+                            <i class="fas fa-arrow-up"></i> Latest Data
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <h3>Total Expenses</h3>
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="kpi-value" id="total-expenses">$0.00</div>
+                        <div class="kpi-change">
+                            <i class="fas fa-info-circle"></i> Operating Costs
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <h3>Net Profit</h3>
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="kpi-value" id="net-profit">$0.00</div>
+                        <div class="kpi-change positive" id="profit-margin">
+                            <i class="fas fa-percent"></i> 0% Margin
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <h3>Active Clients</h3>
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="kpi-value" id="active-clients">0</div>
+                        <div class="kpi-change">
+                            <i class="fas fa-user-plus"></i> Total Unique
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Growth Analysis Metrics -->
+            <section class="growth-section">
+                <div class="growth-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">YoY Growth</div>
+                        <div class="metric-value" id="yoy-growth">0%</div>
+                        <div class="metric-description">Year-over-Year</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">MoM Growth</div>
+                        <div class="metric-value" id="mom-growth">0%</div>
+                        <div class="metric-description">Month-over-Month</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">CAGR</div>
+                        <div class="metric-value" id="cagr">0%</div>
+                        <div class="metric-description">Compound Annual Growth</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Avg Monthly</div>
+                        <div class="metric-value" id="avg-sales">$0</div>
+                        <div class="metric-description">Average Sales</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section">
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Sales Trend</h3>
+                            <div class="chart-actions">
+                                <button class="chart-btn" title="Refresh" onclick="loadCharts()">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <canvas id="salesTrendChart" height="80"></canvas>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Sales Forecast (3 Months)</h3>
+                            <div class="chart-actions">
+                                <button class="chart-btn" title="Refresh" onclick="loadCharts()">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <canvas id="forecastChart" height="80"></canvas>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Sales by Country</h3>
+                            <div class="chart-actions">
+                                <button class="chart-btn" title="Drill-down" onclick="showDrillDown('country')">
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <canvas id="salesCountryChart" height="80"></canvas>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Expenses by Category</h3>
+                            <div class="chart-actions">
+                                <button class="chart-btn" title="Refresh" onclick="loadCharts()">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <canvas id="expensesCategoryChart" height="80"></canvas>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Revenue vs Expenses</h3>
+                            <div class="chart-actions">
+                                <button class="chart-btn" title="Refresh" onclick="loadCharts()">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <canvas id="revenueExpenseChart" height="80"></canvas>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Expense Forecast</h3>
+                            <div class="chart-actions">
+                                <button class="chart-btn" title="Refresh" onclick="loadCharts()">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <canvas id="expenseForecastChart" height="80"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Top Clients Table -->
+            <section class="table-section">
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>Top Performing Clients</h3>
+                        <div class="table-actions">
+                            <input type="text" class="search-input" placeholder="Search clients...">
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Client Name</th>
+                                    <th>Total Sales</th>
+                                    <th>Percentage</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="topClientsBody">
+                                <tr>
+                                    <td colspan="4" class="text-center">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Chat Tab -->
+        <div class="tab-content" id="chat">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h2>AI Financial Analyst</h2>
+                    <p>Ask me anything about your finances</p>
+                </div>
+                
+                <div class="chat-messages" id="chat-box">
+                    <div class="message assistant">
+                        <div class="message-content">
+                            <p>👋 Hello! I'm your AI Financial Analyst. I can help you analyze financial data, generate SQL queries, and provide CFO-level insights. What would you like to know?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-wrapper">
+                    <div class="input-group">
+                        <input 
+                            id="question" 
+                            type="text"
+                            class="chat-input" 
+                            placeholder="Ask me about revenue, expenses, trends..." 
+                            onkeypress="handleKeyPress(event)"
+                        />
+                        <button class="send-btn" onclick="askAI()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="suggestions">
+                        <button class="suggestion-btn" onclick="askQuestion('What were my total sales this month?')">
+                            Monthly Sales
+                        </button>
+                        <button class="suggestion-btn" onclick="askQuestion('Show me expenses by category')">
+                            Expense Breakdown
+                        </button>
+                        <button class="suggestion-btn" onclick="askQuestion('What is my profit margin trend?')">
+                            Profit Margin
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insights Tab -->
+        <div class="tab-content" id="insights">
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Growth Trend</h3>
+                    <p>Revenue is trending upward with consistent growth month-over-month.</p>
+                    <div class="insight-metric">+12.5% YoY</div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Risk Alert</h3>
+                    <p>Operating expenses increased 5.2% this month. Monitor spending.</p>
+                    <div class="insight-metric critical">⚠️ Review</div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Top Performer</h3>
+                    <p>Sales department exceeded targets by 18.3% this quarter.</p>
+                    <div class="insight-metric success">✓ Excellent</div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Action Item</h3>
+                    <p>Optimize Q2 budget allocation based on current spending patterns.</p>
+                    <div class="insight-metric">3 Days</div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Chart Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
