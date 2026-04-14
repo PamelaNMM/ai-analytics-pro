@@ -23,17 +23,21 @@ python app.py
 ## 🎯 Demo
 
 ### Dashboard Overview
-![Dashboard](docs/dashboard.png)
+![Dashboard](docs/dashboard1.png)
 *Main dashboard with KPIs, charts, and growth metrics*
 
 ### Predictive Forecasting
-![Forecasting](docs/forecast.png)
+![Forecasting](docs/dashboard2.png)
 *3-month sales forecast with 95% confidence intervals*
 
 ### Drill-Down Analysis
-![Drill-Down](docs/drill-down.png)
+![Drill-Down](docs/dashboard3.png)
 *Click any client to see transaction details*
 
 ### AI Assistant
-![AI Chat](docs/ai-assistant.png)
+![AI Chat](docs/aiassistant.png)
+*Ask financial questions in natural language*
+
+### AI Assistant
+![Insights](docs/insights.png)
 *Ask financial questions in natural language*
