@@ -19,3 +19,21 @@ python app.py
 - Cost breakdown
 - Margin insights
 - Financial trends
+
+## 🎯 Demo
+
+### Dashboard Overview
+![Dashboard](docs/dashboard.png)
+*Main dashboard with KPIs, charts, and growth metrics*
+
+### Predictive Forecasting
+![Forecasting](docs/forecast.png)
+*3-month sales forecast with 95% confidence intervals*
+
+### Drill-Down Analysis
+![Drill-Down](docs/drill-down.png)
+*Click any client to see transaction details*
+
+### AI Assistant
+![AI Chat](docs/ai-assistant.png)
+*Ask financial questions in natural language*
