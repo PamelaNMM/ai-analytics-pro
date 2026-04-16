@@ -38,6 +38,6 @@ python app.py
 ![AI Chat](docs/aiassistant.png)
 *Ask financial questions in natural language*
 
-### AI Assistant
+### AI Insights
 ![Insights](docs/insights.png)
-*Ask financial questions in natural language*
+*Get summary insights/kpi on the sales data*
